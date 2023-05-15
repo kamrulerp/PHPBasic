@@ -63,10 +63,10 @@ function encryptPair($pair, $keySquare) {
 }
 
 
-$plaintext = 'RSSPNTGNPDKCHMMGQKCHRIGRLGSY';
-$key = 'PADMABRIDGE';
+// $plaintext = 'RSSPNTGNPDKCHMMGQKCHRIGRLGSY';
+// $key = 'PADMABRIDGE';
 
-$ciphertext = playfairCipher($plaintext, $key);
+// $ciphertext = playfairCipher($plaintext, $key);
 //echo $ciphertext; // Output: 'rmfzhbxjgm'
 
 
@@ -166,10 +166,140 @@ function findCharInKeySquare($keySquare, $char) {
 
 
 
-$ciphertext = 'RSSPNTGNPDKCHMMGQKCHRIGRLGSY';
-$keys = 'PADMABRIDGE';
+// $ciphertext = 'RSSPNTGNPDKCHMMGQKCHRIGRLGSY';
+// $keys = 'PADMABRIDGE';
 
-$plaintexts = playfairDecrypt($ciphertext, $keys);
-echo $plaintexts; // Output: 'rmfzhbxjgm'
+// $plaintexts = playfairDecrypt($ciphertext, $keys);
+// echo $plaintexts; // Output: 'rmfzhbxjgm'
 
+
+if(isset($_POST['submit'])){
+  if($_POST['type'] == 'encrypt'){
+    $plaintext = $_POST['plaintext'];
+    $key = $_POST['key'];
+    $ciphertext = playfairCipher($plaintext, $key);
+  }
+
+  if($_POST['type'] == 'decrypt'){
+    $ciphertext = $_POST['plaintext'];
+    $key = $_POST['key'];
+    $plaintext = playfairDecrypt($ciphertext, $key);
+  }
+  
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=\, initial-scale=1.0">
+  <title>PlayFair Cipher</title>
+
+<style>
+  .body{
+    background-color: #f1f1f1;
+  }
+  .section{
+    margin: 0 auto;
+    width: 50%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #000;
+  }
+  .section label{
+    display: block;
+    margin-bottom: 10px;
+  }
+  .section input[type="text"]{
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  .section input[type="submit"]{
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+  }
+  .section input[type="submit"]:hover{
+    background-color: #fff;
+    color: #000;
+  }
+  .section select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  .outputs{
+    margin-top: 20px;
+  }
+  .outputs table{
+    width: 20%;
+    border-collapse: collapse;
+  }
+  .outputs table td{
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+</style>  
+</head>
+<body>
+   <div class="section">
+      <div>
+        <form action="" method="post">
+            <label for="key">Key</label>
+            <input type="text" name="key" id="key" value="<?php echo $key; ?>">
+            <label for="plaintext">Text</label>
+            <input type="text" name="plaintext" id="plaintext" value="<?php echo $_POST['plaintext']; ?>">
+            <label for="ciphertext">Encrypt/Decript</label>
+            <select name="type" id="type">
+              <option value="encrypt">Encrypt</option>
+              <option value="decrypt">Decrypt</option>
+            </select>
+            <input type="submit" name="submit" value="Submit Form">
+        </form>
+      </div>
+      <div class="outputs">
+        <!-- display the key square 5x5 table -->
+        <div>
+            <h3>Key Square</h3>
+            <table>
+                <?php foreach ($keySquare=generateKeySquares($key) as $row): ?>
+                    <tr>
+                        <?php foreach ($row as $char): ?>
+                            <td><?php echo $char; ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+        <!-- display the plaintext pairs -->
+        <div>
+            <h3>Plaintext Pairs</h3>
+            <p><?php foreach ($plaintextPairs=createLetterPairs($_POST['plaintext']) as $pair): ?><?php echo $pair; ?> <?php endforeach; ?></p>
+        </div>
+        <div>
+            <h3>Plaintext</h3>
+            <p><?php echo $plaintext; ?></p>
+        </div>
+        <div>
+            <h3>Ciphertext</h3>
+            <p><?php echo $ciphertext; ?></p>
+        </div> 
+      </div>
+   </div>
+</body>
+</html>
 
